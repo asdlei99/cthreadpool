@@ -1,14 +1,14 @@
-#include "task_operation.h"
+#include "ctask_operation.h"
 #include "cthreadpool.h"
 #include <iostream>
-//#include <windows.h>
-cthread_pool<task_operation> * pool = NULL;
+
+cthread_pool<ctask_operation> * pool = NULL;
 
 void _create()
 {
 	for (int i = 0; i < 30000; ++i)
 	{
-		task_operation *task = new task_operation;
+		ctask_operation *task = new ctask_operation;
 		
 		if (task)
 		{
@@ -19,7 +19,7 @@ void _create()
 				task = NULL;
 			}
 		}
-		//Sleep(4);
+		
 	}
 }
 
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 	////////////////////////////////////////////
 	// init thread_pool 
 	
-	pool = new cthread_pool<task_operation>;
+	pool = new cthread_pool<ctask_operation>;
 	if (!pool)
 	{
 		std::cout << "alloc error" << std::endl;
