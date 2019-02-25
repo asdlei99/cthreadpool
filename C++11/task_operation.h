@@ -1,10 +1,11 @@
 #pragma once
-class task_operation
+#include "cnoncopyable.h"
+class task_operation :public cnoncopyable
 {
 public:
-	task_operation();
+	explicit task_operation(){}
 	
-	~task_operation();
+	virtual ~task_operation(){}
 public:
 	bool init(int sum);
 	void Destroy();

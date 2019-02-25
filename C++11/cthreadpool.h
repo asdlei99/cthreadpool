@@ -17,9 +17,9 @@
 #include <list>
 #include <queue>
 #include <iostream>
-
+#include "cnoncopyable.h"
 template<typename T>
-class cthread_pool
+class cthread_pool :public cnoncopyable
 {
 public:
 	explicit	cthread_pool() :m_thread_num(0), m_max_requests(0),  m_stop(false){}
@@ -85,7 +85,7 @@ inline void cthread_pool<T>::Destroy()
 			it->join();
 		}
 	}
-
+	m_pthread.clear();
 }
 
 template<typename T>

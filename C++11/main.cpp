@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 			it->join();
 		}
 	}
-
+	procuse.clear();
 	
 	pool->Destroy();
 	if (pool)
