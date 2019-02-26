@@ -97,18 +97,20 @@ inline void cthread_pool<T>::_work_thread()
 		{
 			std::unique_lock<std::mutex> lock(m_lock);
 			m_condition.wait(lock, [this]() {return m_task.size() > 0; });
-			if (m_task.size() > 0)
+		}
+		while (!m_task.empty())
+		{
 			{
+				std::lock_guard<std::mutex> lock{ m_lock };
 				task = m_task.front();
 				m_task.pop_front();
 			}
-		}
-		if (!task)
-		{
-			continue;
-		}
-		task->process();
-		
+			if (!task)
+			{
+				continue;
+			}
+			task->process();
+		}	
 	}
 }
 
