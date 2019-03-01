@@ -1,5 +1,5 @@
-#ifndef LOCKER_H
-#define LOCKER_H
+#ifndef _C_LOCKER_H
+#define _C_LOCKER_H
 
 #include <exception>
 #include <pthread.h>
@@ -110,4 +110,4 @@ private:
     pthread_cond_t m_cond;
 };
 
-#endif
+#endif  //_C_LOCKER_H

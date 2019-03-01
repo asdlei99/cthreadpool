@@ -9,17 +9,11 @@ void _create()
 	for (int i = 0; i < 30000; ++i)
 	{
 		ctask_operation *task = new ctask_operation;
-		
 		if (task)
 		{
 			task->init(i);
-			if (!pool->append(task))
-			{
-				delete task;
-				task = NULL;
-			}
+			while (!pool->append(task)) {}
 		}
-		
 	}
 }
 
@@ -42,11 +36,11 @@ int main(int argc, char *argv[])
 		 
 		procuse.emplace_back(std::thread(_create));
 	}
-	for (std::vector<std::thread>::iterator it = procuse.begin(); it != procuse.end(); ++it)
+	for (std::thread &thread : procuse)
 	{
-		if (it->joinable())
+		if (thread.joinable())
 		{
-			it->join();
+			thread.join();
 		}
 	}
 	procuse.clear();

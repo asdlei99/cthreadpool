@@ -77,12 +77,11 @@ inline void cthread_pool<T>::Destroy()
 	}
 	m_condition.notify_all();
 	//printf("[%s] thread = %d\n", __FUNCTION__, m_pthread.size());
-	for (std::vector<std::thread>::iterator it = m_pthread.begin(); it != m_pthread.end(); ++it)
+	for (std::thread &thread : m_pthread)
 	{
-	//	printf("[%s]\n", __FUNCTION__);
-		if (it->joinable())
+		if (thread.joinable())
 		{
-			it->join();
+			thread.join();
 		}
 	}
 	m_pthread.clear();

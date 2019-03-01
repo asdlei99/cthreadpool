@@ -1,22 +1,22 @@
-#ifndef THREADPOOL_H
-#define THREADPOOL_H
+#ifndef _C_THREADPOOL_H
+#define _C_THREADPOOL_H
 
 #include <list>
 #include <cstdio>
 #include <exception>
 #include <pthread.h>
 /*应用第14张介绍的线程同步机制的包装类*/
-#include "locker.h"
+#include "clocker.h"
 
 /*线程池类，将它定位为模板是为了代码复用。模板参数T是任务类*/
 template< typename T >
-class threadpool
+class cthreadpool
 {
 public:
 	/*参数thread_number是线程池中线程的数量，max_requests是请求队列中最多允许的、
 	等待处理的请求的数量*/
-    threadpool( int thread_number = 8, int max_requests = 10000 );
-    ~threadpool();
+    cthreadpool( int thread_number = 8, int max_requests = 10000 );
+    ~cthreadpool();
 	/*往请求队列中添加任务*/
     bool append( T* request );
 
@@ -36,7 +36,7 @@ private:
 };
 
 template< typename T >
-threadpool< T >::threadpool( int thread_number, int max_requests ) : 
+cthreadpool< T >::cthreadpool( int thread_number, int max_requests ) : 
         m_thread_number( thread_number ), m_max_requests( max_requests ), m_stop( false ), m_threads( NULL )
 {
     if( ( thread_number <= 0 ) || ( max_requests <= 0 ) )
@@ -67,14 +67,14 @@ threadpool< T >::threadpool( int thread_number, int max_requests ) :
 }
 
 template< typename T >
-threadpool< T >::~threadpool()
+cthreadpool< T >::~cthreadpool()
 {
     delete [] m_threads;
     m_stop = true;
 }
 
 template< typename T >
-bool threadpool< T >::append( T* request )
+bool cthreadpool< T >::append( T* request )
 {
 	/*操作工作队列时一定要加锁，因为它被所有线程共享*/
     m_queuelocker.lock();
@@ -90,7 +90,7 @@ bool threadpool< T >::append( T* request )
 }
 
 template< typename T >
-void* threadpool< T >::worker( void* arg )
+void* cthreadpool< T >::worker( void* arg )
 {
     threadpool* pool = ( threadpool* )arg;
     pool->run();
@@ -98,7 +98,7 @@ void* threadpool< T >::worker( void* arg )
 }
 
 template< typename T >
-void threadpool< T >::run()
+void cthreadpool< T >::run()
 {
     while ( ! m_stop )
     {
@@ -120,4 +120,4 @@ void threadpool< T >::run()
     }
 }
 
-#endif
+#endif  // _C_THREADPOOL_H
