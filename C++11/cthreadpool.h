@@ -100,6 +100,13 @@ inline void cthread_pool<T>::_work_thread()
 				std::lock_guard<std::mutex> lock{ m_lock };
 				task = m_task.front();
 				m_task.pop_front();
+				//获取thread_id 
+				std::thread::id id = std::this_thread::get_id();
+				std::cout << "pthread_id ----- id : " << id << std::endl;
+				//std::ostringstream oss;
+				//oss << std::this_thread::get_id();
+				//std::string stid = oss.str();
+				//unsigned long long tid = std::stoull(stid);
 			}
 			if (!task)
 			{
