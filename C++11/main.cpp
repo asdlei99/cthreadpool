@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 	pool->init(5, 500);
-	pool->_start();
+	pool->start();
 	std::vector<std::thread> procuse;
 	for (int i = 0; i < 9; ++i)
 	{
